@@ -131,7 +131,8 @@ class Note(object):
                     - (12 * int(res.group(3))))
 
     def __add__(self, other):
-        print(type(other))
+        """I am not sure if adding two notes makes any sense
+           but I am going to keep it"""
         if isinstance(other, Note):
             return Note(self._note_number + other._note_number)
         elif isinstance(other, int):
