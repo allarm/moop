@@ -1,6 +1,49 @@
 import re
-import constants as Constants
+from math import ceil as ceil
 
+# Physical contants
+HEARING_RANGE = (20, 20000)    # 20 Hz to 20 kHz
+
+# Notes
+# https://en.wikipedia.org/wiki/Musical_note
+# Main constant
+MIDI_NOTE_NUMBER = range(0, 128)
+
+NOTES = "C CD D DE E F FG G GA A AB B".split()
+BLACK_KEYS = "CD DE FG GA AB".split()
+
+NOTES_DIC = dict(zip(range(1, 13), NOTES))
+# {1: 'C',  2: 'CD', 3: 'D',   4: 'DE',
+#  5: 'E',  6: 'F',  7: 'FG',  8: 'G',
+#  9: 'GA', 10: 'A', 11: 'AB', 12: 'B'}
+
+NOTES_NUM_DIC = dict(zip(NOTES, range(1, 13)))
+# {'C': 1,  'CD': 2, 'D': 3,   'DE': 4,
+#  'E': 5,  'F': 6,  'FG': 7,  'G': 8,
+#  'GA': 9, 'A': 10, 'AB': 11, 'B': 12}
+
+# Octaves
+
+# https://en.wikipedia.org/wiki/Octave
+# 11 octaves
+
+OCTAVES_NAMES = [
+    'octocontra',
+    'subsubcontra',
+    'subcontra',
+    'contra',
+    'great',
+    'small',
+    'one-lined',
+    'two-lined',
+    'three-lined',
+    'four-lined',
+    'five-lined',
+    'six-lined',
+    'seven-lined'
+]
+OCTAVES_DIC = dict(zip(range(0, len(OCTAVES_NAMES)), OCTAVES_NAMES))
+# OCTAVES_DIC : {0: 'octocontra', 1: 'subsubcontra' ... 12: 'seven-lined'}
 # TODO: add calculation of a pitch of the note
 # https://en.wikipedia.org/wiki/Scientific_pitch_notation
 # TODO: replace asserts with exceptions
@@ -32,8 +75,8 @@ class Note(object):
     @property
     def is_black_key(self):
         """Returns true if note is a black key"""
-        return (Constants.NOTES_DIC[self._note_number % 12]
-                in Constants.BLACK_KEYS)
+        return (NOTES_DIC[self._note_number % 12]
+                in BLACK_KEYS)
 
     @property
     def is_white_key(self):
@@ -48,7 +91,7 @@ class Note(object):
     @property
     def note_name(self):
         """Returns the name of the note"""
-        return Constants.NOTES_DIC[self._note_number % 12]
+        return NOTES_DIC[self._note_number % 12]
 
     @property
     def note_base_name(self):
@@ -58,7 +101,7 @@ class Note(object):
     @property
     def octave_name(self):
         """Returns ocatve name"""
-        return Constants.OCTAVES_DIC[self.note_octave]
+        return OCTAVES_DIC[self.note_octave]
 
     @property
     def note_sci_name(self):
@@ -68,15 +111,15 @@ class Note(object):
         """
         if self.is_black_key:
             return "{note_1}#{octave}/{note_2}♭{octave}".format(
-                note_1=Constants.NOTES_DIC[self._note_number % 12][0],
-                note_2=Constants.NOTES_DIC[self._note_number % 12][1],
+                note_1=NOTES_DIC[self._note_number % 12][0],
+                note_2=NOTES_DIC[self._note_number % 12][1],
                 octave=self.note_octave)
 
         return "{}{}".format(
-            Constants.NOTES_DIC[self._note_number % 12],
+            NOTES_DIC[self._note_number % 12],
             self.note_octave)
-    # Constants.NOTES_SPECIAL_NAMES[self._note_number]
-    # if self._note_number in Constants.NOTES_SPECIAL_NAMES else "")
+    # NOTES_SPECIAL_NAMES[self._note_number]
+    # if self._note_number in NOTES_SPECIAL_NAMES else "")
 
     @note.setter
     def note(self, value):
@@ -113,8 +156,8 @@ class Note(object):
            examples: A1, A-1, AB1, AB-1, CD-10, DE100
         """
         regex = (r'^(' +
-                 ''.join([x+'|' if not x == Constants.NOTES[-1]
-                          else x for x in Constants.NOTES]) +
+                 ''.join([x+'|' if not x == NOTES[-1]
+                          else x for x in NOTES]) +
                  ')(\-*)(\d+)$')
         # '^(C|CD|D|DE|E|F|FG|G|GA|A|AB|B)(\-*)(\d+)$'
 
@@ -124,10 +167,10 @@ class Note(object):
             return None    # does not seem like a note
 
         if not res.group(2):    # positive note
-            return (Constants.NOTES_NUM_DIC[res.group(1)] +
+            return (NOTES_NUM_DIC[res.group(1)] +
                     (12 * int(res.group(3))))
         else:    # negative note
-            return (Constants.NOTES_NUM_DIC[res.group(1)]
+            return (NOTES_NUM_DIC[res.group(1)]
                     - (12 * int(res.group(3))))
 
     def __add__(self, other):
