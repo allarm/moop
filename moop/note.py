@@ -178,12 +178,14 @@ class Note(object):
         if not res:
             return None    # does not seem like a note
 
-        if not res.group(2):    # positive note
-            return (Constants.NOTES_NUM_DIC[res.group(1)] +
-                    (12 * int(res.group(3))))
-        else:    # negative note
-            return (Constants.NOTES_NUM_DIC[res.group(1)]
-                    - (12 * int(res.group(3))))
+        # A-1 -> A
+        _input_note = res.group(1)
+        
+        # A-1 -> -1
+        _input_octave = int(res.group(2) + res.group(3))
+
+        # return the MIDI number
+        return 12 * (_input_octave + 1) + Constants.NOTES_NUM_DIC[_input_note] - 1
 
     def __add__(self, other):
         """I am not sure if adding two notes makes any sense
