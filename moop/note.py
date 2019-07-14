@@ -57,12 +57,7 @@ class Constants(object):
 
 
 class Note(object):
-    # import Constants
-    """Class Note
-
-    Note characteristics:
-        - Note name / octave tuple
-    """
+    """Class Note """
 
     def __init__(self, note=0):
         """__init__ method:
@@ -125,8 +120,6 @@ class Note(object):
         return "{}{}".format(
             Constants.NOTES_DIC[self._midi_note_number % 12],
             self.note_octave)
-    # NOTES_SPECIAL_NAMES[self._midi_note_number]
-    # if self._midi_note_number in NOTES_SPECIAL_NAMES else "")
 
     @note.setter
     def note(self, value):
@@ -142,28 +135,34 @@ class Note(object):
         """
 
         if not isinstance(value, (str, tuple, int)):
-            raise ValueError('Expected str, tuple or int, got {}'.format(type(value))) 
+            raise ValueError(
+                'Expected str, tuple or int, got {}'.format(type(value)))
 
         if isinstance(value, str):    # string
             self._midi_note_number = self._str_note_to_number(value)
             if self._midi_note_number is None:
-                raise ValueError('{} is not a valid note.'.format(value))
+                raise ValueError(
+                    '{} is not a valid note.'.format(value))
 
         # tuple. expect ("A", 1) - (note, octave)
         elif isinstance(value, tuple):
             if not isinstance(value[1], int):
                 # Expected the octave number in integer
-                raise ValueError('Expected int got {}'.format(type(value[1])))
-            self._midi_note_number = self._str_note_to_number(str(str(value[0])+str(value[1])))
-
+                raise ValueError(
+                    'Expected int got {}'.format(type(value[1])))
+            self._midi_note_number = self._str_note_to_number(
+                ''.join(map(str, value))
+            )
+        # value is integer. checking that it within the MIDI
+        # values range and assigning it to a note number
         else:    # integer
             self._midi_note_number = value
 
     def _str_note_to_number(self, value):
         """returns a MIDI number of the note
            returns None if it is not a note
-        
-           Input: value - note in a scientific format
+
+           Input: value - str, note in a scientific format
 
            note formats:
            <name><octave> where
@@ -172,6 +171,8 @@ class Note(object):
                octave is int, can be negative
            examples: A1, A-1, AB1, AB-1, CD-4, DE3
         """
+        value = value.upper()
+
         regex = (r'^(' +
                  ''.join([x+'|' if not x == Constants.NOTES[-1]
                           else x for x in Constants.NOTES]) +
@@ -185,7 +186,7 @@ class Note(object):
 
         # A-1 -> A
         _input_note = res.group(1)
-        
+
         # A-1 -> -1
         _input_octave = int(res.group(2) + res.group(3))
 
