@@ -141,15 +141,20 @@ class Note(object):
         TODO: replace asserts with try..except
         """
 
-        assert isinstance(value, (str, tuple, int)), "Str, tuple or int expected, not a {}!".format(type(value))
+        if not isinstance(value, (str, tuple, int)):
+            raise ValueError('Expected str, tuple or int, got {}'.format(type(value))) 
 
         if isinstance(value, str):    # string
             self._midi_note_number = self._str_note_to_number(value)
-            assert (self._midi_note_number is not None), "{} is not a valid note".format(value)
+            if self._midi_note_number is None:
+                raise ValueError('{} is not a valid note.'.format(value))
 
-        elif isinstance(value, tuple):    # tuple. accept tuples like ("A1","2") - converts it in A12 - probably fix later
+        # tuple. expect ("A", 1) - (note, octave)
+        elif isinstance(value, tuple):
+            if not isinstance(value[1], int):
+                # Expected the octave number in integer
+                raise ValueError('Expected int got {}'.format(type(value[1])))
             self._midi_note_number = self._str_note_to_number(str(str(value[0])+str(value[1])))
-            assert (self._midi_note_number is not None), "{} is not a valid note tuple".format(value)
 
         else:    # integer
             self._midi_note_number = value
@@ -176,7 +181,7 @@ class Note(object):
         res = re.search(regex, value)
         # print("regex: {}, value: {}".format(regex,value))
         if not res:
-            return None    # does not seem like a note
+            raise ValueError('Wrong note: {}'.format(value))
 
         # A-1 -> A
         _input_note = res.group(1)
