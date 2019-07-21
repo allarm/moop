@@ -59,15 +59,17 @@ class Constants(object):
 class Note(object):
     """Class Note """
 
-    def __init__(self):
+    # def __init__(self, *args, **kwargs):
+    def __init__(self, value=None):
         """__init__ method:
 
         Args:
         Note name in {0: 'C', 1: 'CD', 2: 'D', 3: 'DE', 4: 'E', 5: 'F',
         6: 'FG', 7: 'G', 8: 'GA', 9: 'A', 10: 'AB', 11: 'B'}
        """
-
-        self._midi_note_number = None
+        # print(args, kwargs)
+        # self._midi_note_number = value
+        self.note = value
 
     @property
     def note(self):
@@ -82,13 +84,6 @@ class Note(object):
 
     @property
     def is_white_key(self):
-        """Returns true if note is a white key"""
-        # return not self.is_black_key(self)
-        return not (Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
-                    in Constants.BLACK_KEYS)
-
-    @property
-    def is_is(self):
         """Returns true if note is a white key"""
         # return not self.is_black_key(self)
         return not (Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
@@ -148,14 +143,12 @@ class Note(object):
         TODO: replace asserts with try..except
         """
 
-        print("{} {}".format(value, type(value)))
-
-        if not isinstance(value, (self.__class__, str, tuple, int)):
+        if not isinstance(value, (self.__class__, str, tuple, int, type(None))):
             raise ValueError(
-                    'Expected {} str, tuple or int, got {}'.format(self.__class__, type(value)))
+                    'Wrong type {}'.format(type(value)))
 
         if isinstance(value, str):  # string
-            print("{}: {}".format(value, self._str_note_to_number(value)))
+            # print("{}: {}".format(value, self._str_note_to_number(value)))
             self._midi_note_number = self._str_note_to_number(value)
             if self._midi_note_number is None:
                 raise ValueError(
@@ -172,8 +165,12 @@ class Note(object):
                     )
         # value is integer. checking that it within the MIDI
         # values range and assigning it to a note number
-        else:  # integer
+        else:  # integer or None
             self._midi_note_number = value
+
+    @note.getter
+    def note(self):
+        return self._midi_note_number
 
     def _str_note_to_number(self, value):
         """returns a MIDI number of the note
@@ -214,10 +211,13 @@ class Note(object):
     def __add__(self, other):
         """I am not sure if adding two notes makes any sense
            but I am going to keep it"""
-        if isinstance(other, Note):
-            return Note(self._midi_note_number + other._midi_note_number)
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            # return Note(self._midi_note_number + other._midi_note_number)
+            return Note(self.note + other.note)
         elif isinstance(other, int):
-            return Note(self._midi_note_number + other)
+            # return Note(self._midi_note_number + other)
+            return Note(self.note + other)
         else:
             raise ValueError('{} is instance of {}, not {} or Note'
                              .format(other, type(other), type(1)))
