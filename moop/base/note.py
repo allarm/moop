@@ -208,21 +208,50 @@ class Note(object):
                 Constants.NOTES_NUM_DIC[_input_note] - 1)
 
     def __add__(self, other):
-        """I am not sure if adding two notes makes any sense
-           but I am going to keep it"""
+        """
+        Addition
+
+        :param other: Note or int
+        :return: Note
+
+        DONE: add range check
+        """
         if isinstance(other, self.__class__):
             # both arguments are Note
-            # return Note(self._midi_note_number + other._midi_note_number)
-            return Note(self.note + other.note)
+            result = Note(self.note + other.note)
         elif isinstance(other, int):
-            # return Note(self._midi_note_number + other)
-            return Note(self.note + other)
+            result = Note(self.note + other)
         else:
             raise ValueError('{} is instance of {}, not {} or Note'
                              .format(other, type(other), type(1)))
+        if result.note in Constants.MIDI_NOTE_RANGE:
+            return result
+        else:
+            raise ValueError('Result {} out of range {}.'
+                             .format(result.note, Constants.MIDI_NOTE_RANGE))
 
     def __sub__(self, other):
-        return Note(self._midi_note_number - other._midi_note_number)
+        """
+        Subtraction
+
+        :param other: Note or int
+        :return: Note
+
+        DONE: add range check
+        """
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            result = Note(self.note - other.note)
+        elif isinstance(other, int):
+            result = Note(self.note - other)
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
+        if result.note in Constants.MIDI_NOTE_RANGE:
+            return result
+        else:
+            raise ValueError('Result {} out of range {}.'
+                             .format(result.note, Constants.MIDI_NOTE_RANGE))
 
     def __mul__(self, value):
         return self._midi_note_number * value

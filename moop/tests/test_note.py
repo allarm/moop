@@ -62,5 +62,29 @@ class TestNote(TestCase):
         self.assertEqual(self.note_3.note_sci_name, 'C#1/D♭1')
         self.assertEqual(self.note_5.note_sci_name, 'C-1')
 
+    def test___add__(self):
+        self.assertEqual((self.note_4+1).note, 25)
+
+        raised_exc = None
+
+        try:
+            self.note_5 + 130
+        except ValueError as e:
+            raised_exc = e
+        if not raised_exc:
+            self.fail("{} was not raised".format(ValueError))
+
+    def test___sub__(self):
+        self.assertEqual((self.note_4-1).note, 23)
+
+        raised_exc = None
+
+        try:
+            self.note_5 - 1
+        except ValueError as e:
+            raised_exc = e
+        if not raised_exc:
+            self.fail("{} was not raised".format(ValueError))
+
     # def test__str_note_to_number(self):
     #     self.fail()
