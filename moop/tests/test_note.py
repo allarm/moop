@@ -86,5 +86,55 @@ class TestNote(TestCase):
         if not raised_exc:
             self.fail("{} was not raised".format(ValueError))
 
-    # def test__str_note_to_number(self):
-    #     self.fail()
+    def test___mul__(self):
+        self.assertEqual((self.note_4*2).note, 48)
+
+        raised_exc = None
+
+        try:
+            self.note_4 * 10
+        except ValueError as e:
+            raised_exc = e
+        if not raised_exc:
+            self.fail("{} was not raised".format(ValueError))
+
+    def test___truediv__(self):
+        self.assertEqual((self.note_4/2).note, 12)
+
+        raised_exc = None
+
+        try:
+            self.note_4/-1
+        except ValueError as e:
+            raised_exc = e
+        if not raised_exc:
+            self.fail("{} was not raised".format(ValueError))
+
+    def test___gt__(self):
+        self.assertEqual(self.note_4 > 0, True)
+        self.assertEqual(self.note_4 > self.note_5, True)
+        self.assertEqual(self.note_4 > 128, False)
+
+    def test___ge__(self):
+        self.assertEqual(self.note_4 >= 0, True)
+        self.assertEqual(self.note_4 >= self.note_4, True)
+        self.assertEqual(self.note_4 >= self.note_5, True)
+        self.assertEqual(self.note_4 >= 128, False)
+
+    def test___lt__(self):
+        self.assertEqual(self.note_4 < 128, True)
+        self.assertEqual(self.note_4 < self.note_5, False)
+        self.assertEqual(self.note_4 < 0, False)
+
+    def test___le__(self):
+        self.assertEqual(self.note_4 <= 0, False)
+        self.assertEqual(self.note_4 <= self.note_4, True)
+        self.assertEqual(self.note_4 <= self.note_5, False)
+        self.assertEqual(self.note_4 <= 128, True)
+
+    def test___eq__(self):
+        self.assertEqual(self.note_4 == 0, False)
+        self.assertEqual(self.note_5 == 0, True)
+        self.assertEqual(self.note_4 == self.note_4, True)
+        self.assertEqual(self.note_4 == self.note_5, False)
+        self.assertEqual(self.note_4 == 24, True)

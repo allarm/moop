@@ -1,17 +1,14 @@
 import re
-from math import ceil as ceil
 
 
 class Constants(object):
-    # Physical contants
+    # Physical constants
     HEARING_RANGE = (20, 20000)  # 20 Hz to 20 kHz
 
     # Notes
     # https://en.wikipedia.org/wiki/Musical_note
     # Main constant
     # Piano range 21-108 (88 keys from A0 to C8)
-    # According to https://en.wikipedia.org/wiki/Range_(music)
-    # some organs extend down to C-1.
 
     # Everything is tied to MIDI note number. It's fundamental.
 
@@ -162,8 +159,6 @@ class Note(object):
             self._midi_note_number = self._str_note_to_number(
                     ''.join(map(str, value))
                     )
-        # value is integer. checking that it within the MIDI
-        # values range and assigning it to a note number
         else:  # integer or None
             self._midi_note_number = value
 
@@ -236,8 +231,6 @@ class Note(object):
 
         :param other: Note or int
         :return: Note
-
-        DONE: add range check
         """
         if isinstance(other, self.__class__):
             # both arguments are Note
@@ -259,8 +252,6 @@ class Note(object):
 
         :param other: Note or int
         :return: Note
-
-        TODO: tests
         """
 
         if isinstance(other, self.__class__):
@@ -277,14 +268,12 @@ class Note(object):
             raise ValueError('Result {} out of range {}.'
                              .format(result.note, Constants.MIDI_NOTE_RANGE))
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         """
         Division
 
         :param other: Note or int
         :return: Note
-
-        TODO: tests
         """
 
         if isinstance(other, self.__class__):
@@ -307,8 +296,6 @@ class Note(object):
 
         :param other: Note or int
         :return: boolean
-
-        TODO: tests
         """
         if isinstance(other, self.__class__):
             # both arguments are Note
@@ -325,8 +312,6 @@ class Note(object):
 
         :param other: Note or int
         :return: boolean
-
-        TODO: tests
         """
 
         if isinstance(other, self.__class__):
@@ -344,8 +329,6 @@ class Note(object):
 
         :param other: Note or int
         :return: boolean
-
-        TODO: tests
         """
 
         if isinstance(other, self.__class__):
@@ -363,8 +346,6 @@ class Note(object):
 
         :param other: Note or int
         :return: boolean
-
-        TODO: tests
         """
 
         if isinstance(other, self.__class__):
@@ -382,8 +363,6 @@ class Note(object):
 
         :param other: Note or int
         :return: boolean
-
-        TODO: tests
         """
         if isinstance(other, self.__class__):
             # both arguments are Note
