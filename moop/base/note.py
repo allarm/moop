@@ -140,7 +140,6 @@ class Note(object):
             str: scientific notation: A0, A-1, A1
 
         TODO: add Helmholtz notation
-        TODO: replace asserts with try..except
         """
 
         if not isinstance(value, (self.__class__, str, tuple, int, type(None))):
