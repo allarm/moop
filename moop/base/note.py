@@ -68,7 +68,6 @@ class Note(object):
        """
 
         self.note = note
-        self._midi_note_number = None
 
     @property
     def note(self):
@@ -99,7 +98,7 @@ class Note(object):
     @property
     def note_name(self):
         """Returns the name of the note"""
-        return Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
+        return Constants.NOTES_DIC[self._midi_note_number % 12 + 1] 
 
     @property
     def note_base_name(self):
@@ -114,7 +113,7 @@ class Note(object):
     @property
     def note_sci_name(self):
         """Returns scientific name of the note:
-           A4
+           A4 
            G♯4/A♭4
         """
         if self.is_black_key:
@@ -140,12 +139,11 @@ class Note(object):
         TODO: replace asserts with try..except
         """
 
-        if not isinstance(value, (self.__class__, str, tuple, int)):
+        if not isinstance(value, (str, tuple, int)):
             raise ValueError(
-                'Expected {}, str, tuple or int, got {}'.format(self.__class__,
-                                                                type(value)))
-        # string
-        if isinstance(value, str):
+                'Expected str, tuple or int, got {}'.format(type(value)))
+
+        if isinstance(value, str):    # string
             self._midi_note_number = self._str_note_to_number(value)
             if self._midi_note_number is None:
                 raise ValueError(
