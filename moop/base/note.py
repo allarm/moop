@@ -4,7 +4,7 @@ from math import ceil as ceil
 
 class Constants(object):
     # Physical contants
-    HEARING_RANGE = (20, 20000)    # 20 Hz to 20 kHz
+    HEARING_RANGE = (20, 20000)  # 20 Hz to 20 kHz
 
     # Notes
     # https://en.wikipedia.org/wiki/Musical_note
@@ -41,19 +41,19 @@ class Constants(object):
 
     OCTAVES_DIC = {
         -1: 'Dbl Contra',
-        0: 'Sub Contra',
-        1: 'Contra',
-        2: 'Great',
-        3: 'Small',
-        4: '1 Line',
-        5: '2 Line',
-        6: '3 Line',
-        7: '4 Line',
-        8: '5 Line',
-        9: '6 Line',
+        0:  'Sub Contra',
+        1:  'Contra',
+        2:  'Great',
+        3:  'Small',
+        4:  '1 Line',
+        5:  '2 Line',
+        6:  '3 Line',
+        7:  '4 Line',
+        8:  '5 Line',
+        9:  '6 Line',
         10: '7 Line',
         11: ''
-    }
+        }
 
 
 class Note(object):
@@ -98,7 +98,7 @@ class Note(object):
     @property
     def note_name(self):
         """Returns the name of the note"""
-        return Constants.NOTES_DIC[self._midi_note_number % 12 + 1] 
+        return Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
 
     @property
     def note_base_name(self):
@@ -118,13 +118,13 @@ class Note(object):
         """
         if self.is_black_key:
             return "{note_1}#{octave}/{note_2}♭{octave}".format(
-                note_1=Constants.NOTES_DIC[self._midi_note_number % 12 + 1][0],
-                note_2=Constants.NOTES_DIC[self._midi_note_number % 12 + 1][1],
-                octave=self.note_sci_octave)
+                    note_1=Constants.NOTES_DIC[self._midi_note_number % 12 + 1][0],
+                    note_2=Constants.NOTES_DIC[self._midi_note_number % 12 + 1][1],
+                    octave=self.note_sci_octave)
 
         return "{}{}".format(
-            Constants.NOTES_DIC[self._midi_note_number % 12 + 1],
-            self.note_sci_octave)
+                Constants.NOTES_DIC[self._midi_note_number % 12 + 1],
+                self.note_sci_octave)
 
     @note.setter
     def note(self, value):
@@ -139,28 +139,28 @@ class Note(object):
         TODO: replace asserts with try..except
         """
 
-        if not isinstance(value, (str, tuple, int)):
+        if not isinstance(value, (self.__class__, str, tuple, int)):
             raise ValueError(
-                'Expected str, tuple or int, got {}'.format(type(value)))
+                    'Expected {} str, tuple or int, got {}'.format(self.__class__, type(value)))
 
-        if isinstance(value, str):    # string
+        if isinstance(value, str):  # string
             self._midi_note_number = self._str_note_to_number(value)
             if self._midi_note_number is None:
                 raise ValueError(
-                    '{} is not a valid note.'.format(value))
+                        '{} is not a valid note.'.format(value))
 
         # tuple. expect ("A", 1) - (note, octave)
         elif isinstance(value, tuple):
             if not isinstance(value[1], int):
                 # Expected the octave number in integer
                 raise ValueError(
-                    'Expected int got {}'.format(type(value[1])))
+                        'Expected int got {}'.format(type(value[1])))
             self._midi_note_number = self._str_note_to_number(
-                ''.join(map(str, value))
-            )
+                    ''.join(map(str, value))
+                    )
         # value is integer. checking that it within the MIDI
         # values range and assigning it to a note number
-        else:    # integer
+        else:  # integer
             self._midi_note_number = value
 
     def _str_note_to_number(self, value):
@@ -179,7 +179,7 @@ class Note(object):
         value = value.upper()
 
         regex = (r'^(' +
-                 ''.join([x+'|' if not x == Constants.NOTES[-1]
+                 ''.join([x + '|' if not x == Constants.NOTES[-1]
                           else x for x in Constants.NOTES]) +
                  ')(\-*)(\d+)$')
         # '^(C|CD|D|DE|E|F|FG|G|GA|A|AB|B)(\-*)(\d+)$'
