@@ -275,4 +275,6 @@ class Note(object):
         return self._midi_note_number == other._midi_note_number
 
     def __repr__(self):
-        return "{}".format(self._midi_note_number)
+        # return "{}".format(self._midi_note_number)
+        return "{}: {} / {}"\
+            .format(self.note, self.note_base_name, self.note_sci_name)
