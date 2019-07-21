@@ -59,7 +59,7 @@ class Constants(object):
 class Note(object):
     """Class Note """
 
-    def __init__(self, note=0):
+    def __init__(self):
         """__init__ method:
 
         Args:
@@ -67,7 +67,7 @@ class Note(object):
         6: 'FG', 7: 'G', 8: 'GA', 9: 'A', 10: 'AB', 11: 'B'}
        """
 
-        self.note = note
+        self._midi_note_number = None
 
     @property
     def note(self):
@@ -83,7 +83,16 @@ class Note(object):
     @property
     def is_white_key(self):
         """Returns true if note is a white key"""
-        return not self.is_black_key(self)
+        # return not self.is_black_key(self)
+        return not (Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
+                    in Constants.BLACK_KEYS)
+
+    @property
+    def is_is(self):
+        """Returns true if note is a white key"""
+        # return not self.is_black_key(self)
+        return not (Constants.NOTES_DIC[self._midi_note_number % 12 + 1]
+                    in Constants.BLACK_KEYS)
 
     @property
     def note_sci_octave(self):
@@ -139,11 +148,14 @@ class Note(object):
         TODO: replace asserts with try..except
         """
 
+        print("{} {}".format(value, type(value)))
+
         if not isinstance(value, (self.__class__, str, tuple, int)):
             raise ValueError(
                     'Expected {} str, tuple or int, got {}'.format(self.__class__, type(value)))
 
         if isinstance(value, str):  # string
+            print("{}: {}".format(value, self._str_note_to_number(value)))
             self._midi_note_number = self._str_note_to_number(value)
             if self._midi_note_number is None:
                 raise ValueError(
