@@ -253,26 +253,146 @@ class Note(object):
             raise ValueError('Result {} out of range {}.'
                              .format(result.note, Constants.MIDI_NOTE_RANGE))
 
-    def __mul__(self, value):
-        return self._midi_note_number * value
+    def __mul__(self, other):
+        """
+        Multiplication
 
-    def __div__(self, value):
-        return self._midi_note_number // value
+        :param other: Note or int
+        :return: Note
+
+        TODO: tests
+        """
+
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            result = Note(self.note * other.note)
+        elif isinstance(other, int):
+            result = Note(self.note * other)
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
+        if result.note in Constants.MIDI_NOTE_RANGE:
+            return result
+        else:
+            raise ValueError('Result {} out of range {}.'
+                             .format(result.note, Constants.MIDI_NOTE_RANGE))
+
+    def __div__(self, other):
+        """
+        Division
+
+        :param other: Note or int
+        :return: Note
+
+        TODO: tests
+        """
+
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            result = Note(self.note // other.note)
+        elif isinstance(other, int):
+            result = Note(self.note // other)
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
+        if result.note in Constants.MIDI_NOTE_RANGE:
+            return result
+        else:
+            raise ValueError('Result {} out of range {}.'
+                             .format(result.note, Constants.MIDI_NOTE_RANGE))
 
     def __gt__(self, other):
-        return self._midi_note_number > other._midi_note_number
+        """
+        Greater than
+
+        :param other: Note or int
+        :return: boolean
+
+        TODO: tests
+        """
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            return self.note > other.note
+        elif isinstance(other, int):
+            return self.note > other
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
 
     def __ge__(self, other):
-        return self._midi_note_number >= other._midi_note_number
+        """
+        Greater or equal
+
+        :param other: Note or int
+        :return: boolean
+
+        TODO: tests
+        """
+
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            return self.note >= other.note
+        elif isinstance(other, int):
+            return self.note >= other
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
 
     def __lt__(self, other):
-        return self._midi_note_number < other._midi_note_number
+        """
+        Less than
+
+        :param other: Note or int
+        :return: boolean
+
+        TODO: tests
+        """
+
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            return self.note < other.note
+        elif isinstance(other, int):
+            return self.note < other
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
 
     def __le__(self, other):
-        return self._midi_note_number <= other._midi_note_number
+        """
+        Less or equal
+
+        :param other: Note or int
+        :return: boolean
+
+        TODO: tests
+        """
+
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            return self.note <= other.note
+        elif isinstance(other, int):
+            return self.note <= other
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
 
     def __eq__(self, other):
-        return self._midi_note_number == other._midi_note_number
+        """
+        Equal
+
+        :param other: Note or int
+        :return: boolean
+
+        TODO: tests
+        """
+        if isinstance(other, self.__class__):
+            # both arguments are Note
+            return self.note == other.note
+        elif isinstance(other, int):
+            return self.note == other
+        else:
+            raise ValueError('{} is instance of {}, not {} or Note'
+                             .format(other, type(other), type(1)))
 
     def __repr__(self):
         # return "{}".format(self._midi_note_number)
