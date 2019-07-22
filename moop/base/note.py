@@ -164,13 +164,19 @@ class Note(object):
 
     @note.getter
     def note(self):
+        """
+
+        :return:
+
+        TODO: check if I need to replace getter with property
+        """
         return self._midi_note_number
 
     def _str_note_to_number(self, value):
         """returns a MIDI number of the note
            returns None if it is not a note
 
-           Input: value - str, note in a scientific format
+           Input: value - str, note in an internal format
 
            note formats:
            <name><octave> where
